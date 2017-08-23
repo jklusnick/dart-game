@@ -29,7 +29,7 @@ def changeKeys(key, value):
 		KEYS['w'] = value
 
 tile_size = 24
-player = [0, 0]
+player = [DIMENSIONS[0]/2 - tile_size/2, DIMENSIONS[1]/2 - tile_size/2]
 speed = 4
 
 def movement():
@@ -65,7 +65,13 @@ while is_running:
 		food[1] = random.randint(0, DIMENSIONS[1]-tile_size)
 
 	if player[0] < 0:
-		player[0] = 600
+		player[0] = DIMENSIONS[0]
+	if player[0] > DIMENSIONS[0]:
+		player[0] = 0
+	if player[1] < 0:
+		player[1] = DIMENSIONS[1]
+	if player[1] > DIMENSIONS[1]:
+		player[1] = 0
 
 	SCREEN.fill((255,255,255))
 
