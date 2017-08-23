@@ -56,6 +56,25 @@ food = [random.randint(0, DIMENSIONS[0]-tile_size), \
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 scoretext = myfont.render("Score = {0}".format(score), 1, (0, 0, 0))
 
+bullets = []
+dart_guns = []
+
+def newDart(direction, x, y):
+	return {
+		"direction": direction,
+		"x": x,
+		"y": y,
+		"timer": 0,
+		"timerMax": 5
+	}
+
+def updateDartTimers():
+	for dart_gun in dart_guns:
+		if dart_gun['timer'] > dart_gun['timerMax']:
+			dart_gun['timer'] += 1/TARGET_FPS
+		else:
+			dart_gun['timer'] = 0
+
 while is_running:
 	for event in pygame.event.get():
 		if event.type == pygame.KEYDOWN:
