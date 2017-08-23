@@ -7,6 +7,8 @@ SCREEN = pygame.display.set_mode(DIMENSIONS)
 CLOCK = pygame.time.Clock()
 TARGET_FPS = 60
 
+score = 0
+
 pygame.display.set_caption("dart-game")
 
 is_running = True
@@ -32,6 +34,12 @@ tile_size = 24
 player = [DIMENSIONS[0]/2 - tile_size/2, DIMENSIONS[1]/2 - tile_size/2]
 speed = 4
 
+def rand_x():
+	return random.randint(0, DIMENSIONS[0])
+
+def rand_y():
+	return random.randint(0, DIMENSIONS[1])
+
 def movement():
 	if KEYS['d']:
 		player[0] += speed
@@ -44,6 +52,9 @@ def movement():
 
 food = [random.randint(0, DIMENSIONS[0]-tile_size), \
 	random.randint(0, DIMENSIONS[1]-tile_size)]
+
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
+scoretext = myfont.render("Score = {0}".format(score), 1, (0, 0, 0))
 
 while is_running:
 	for event in pygame.event.get():
@@ -63,12 +74,15 @@ while is_running:
 	food[1] + tile_size > player[1]:
 		food[0] = random.randint(0, DIMENSIONS[0]-tile_size)
 		food[1] = random.randint(0, DIMENSIONS[1]-tile_size)
+		score+=1
+		scoretext = myfont.render("Score = {0}".format(score), 1, (0, 0, 0))
 
-	if player[0] < 0:
+
+	if player[0] < -tile_size:
 		player[0] = DIMENSIONS[0]
 	if player[0] > DIMENSIONS[0]:
 		player[0] = 0
-	if player[1] < 0:
+	if player[1] < -tile_size:
 		player[1] = DIMENSIONS[1]
 	if player[1] > DIMENSIONS[1]:
 		player[1] = 0
@@ -80,6 +94,8 @@ while is_running:
 		tile_size, tile_size))
 	pygame.draw.rect(SCREEN, (200,200,0), (food[0], food[1], \
 		tile_size, tile_size))
+
+	SCREEN.blit(scoretext, (0, 0))
 
 	pygame.display.update()
 
