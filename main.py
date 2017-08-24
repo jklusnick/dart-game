@@ -60,13 +60,13 @@ bullets = []
 dart_guns = []
 
 def newDart(direction, x, y):
-	return {
+	dart_guns.append({
 		"direction": direction,
 		"x": x,
 		"y": y,
 		"timer": 0,
 		"timerMax": 5
-	}
+	})
 
 def updateDartTimers():
 	for dart_gun in dart_guns:
