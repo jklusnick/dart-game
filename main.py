@@ -20,6 +20,13 @@ KEYS = {
 	"w": False
 }
 
+directions = [
+	'up',
+	'down',
+	'left',
+	'right'
+]
+
 def changeKeys(key, value):
 	if key == pygame.K_d:
 		KEYS['d'] = value
@@ -59,9 +66,28 @@ scoretext = myfont.render("Score = {0}".format(score), 1, (0, 0, 0))
 bullets = []
 dart_guns = []
 
-def newDart(direction, x, y):
+def newDart(direction):
+	x = 0
+	y = 0
+	shoot_direction = ''
+	if direction == 'right':
+		x=DIMENSIONS[0] - tile_size
+		y=rand_y()
+		shoot_direction = 'left'
+	elif direction == 'left':
+		x=0
+		y=rand_y()
+		shoot_direction = 'right'
+	elif direction == 'down':
+		x=rand_x()
+		y=DIMENSIONS[1] - tile_size
+		shoot_direction = 'up'
+	elif direction == 'up':
+		x=rand_x()
+		y=0
+		shoot_direction = 'down'
 	dart_guns.append({
-		"direction": direction,
+		"shoot_direction": shoot_direction,
 		"x": x,
 		"y": y,
 		"timer": 0,
@@ -70,7 +96,7 @@ def newDart(direction, x, y):
 
 def updateDartTimers():
 	for dart_gun in dart_guns:
-		if dart_gun['timer'] > dart_gun['timerMax']:
+		if dart_gun['timer'] < dart_gun['timerMax']:
 			dart_gun['timer'] += 1/TARGET_FPS
 		else:
 			dart_gun['timer'] = 0
@@ -95,7 +121,8 @@ while is_running:
 		food[1] = random.randint(0, DIMENSIONS[1]-tile_size)
 		score+=1
 		scoretext = myfont.render("Score = {0}".format(score), 1, (0, 0, 0))
-
+		direction = directions[random.randint(0, len(directions)-1)]
+		newDart(direction)
 
 	if player[0] < -tile_size:
 		player[0] = DIMENSIONS[0]
@@ -113,6 +140,10 @@ while is_running:
 		tile_size, tile_size))
 	pygame.draw.rect(SCREEN, (200,200,0), (food[0], food[1], \
 		tile_size, tile_size))
+
+	for dart_gun in dart_guns:
+		pygame.draw.rect(SCREEN, (100,100,100), (dart_gun['x'], dart_gun['y'], \
+			tile_size, tile_size))	
 
 	SCREEN.blit(scoretext, (0, 0))
 
