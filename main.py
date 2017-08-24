@@ -65,6 +65,29 @@ scoretext = myfont.render("Score = {0}".format(score), 1, (0, 0, 0))
 
 bullets = []
 dart_guns = []
+bullet_speed = 8
+
+def newBullet(dart_gun):
+	vx, vy = 0, 0
+	if dart_gun['shoot_direction'] == 'right':
+		vx = bullet_speed
+	if dart_gun['shoot_direction'] == 'left':
+		vx = -bullet_speed
+	if dart_gun['shoot_direction'] == 'up':
+		vy = -bullet_speed
+	if dart_gun['shoot_direction'] == 'down':
+		vy = bullet_speed
+	bullets.append({
+		'x': dart_gun['x'],
+		'y': dart_gun['y'],
+		'vx': vx,
+		'vy': vy
+	})
+
+def updateBullets():
+	for bullet in bullets:
+		bullet['x'] += bullet['vx']
+		bullet['y'] += bullet['vy']
 
 def newDart(direction):
 	x = 0
@@ -97,9 +120,10 @@ def newDart(direction):
 def updateDartTimers():
 	for dart_gun in dart_guns:
 		if dart_gun['timer'] < dart_gun['timerMax']:
-			dart_gun['timer'] += 1/TARGET_FPS
-		else:
+			dart_gun['timer'] += .1
+		else: 
 			dart_gun['timer'] = 0
+			newBullet(dart_gun)
 
 while is_running:
 	for event in pygame.event.get():
@@ -133,6 +157,9 @@ while is_running:
 	if player[1] > DIMENSIONS[1]:
 		player[1] = 0
 
+	updateDartTimers()
+	updateBullets()
+
 	SCREEN.fill((255,255,255))
 
 	# Draw here
@@ -143,7 +170,10 @@ while is_running:
 
 	for dart_gun in dart_guns:
 		pygame.draw.rect(SCREEN, (100,100,100), (dart_gun['x'], dart_gun['y'], \
-			tile_size, tile_size))	
+			tile_size, tile_size))
+	for bullet in bullets:
+		pygame.draw.rect(SCREEN, (100,0,0), (bullet['x'], bullet['y'], \
+			8, 8))
 
 	SCREEN.blit(scoretext, (0, 0))
 
