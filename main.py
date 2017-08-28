@@ -40,6 +40,7 @@ def changeKeys(key, value):
 tile_size = 24
 player = [DIMENSIONS[0]/2 - tile_size/2, DIMENSIONS[1]/2 - tile_size/2]
 speed = 4
+bullet_size = 8
 
 def rand_x():
 	return random.randint(0, DIMENSIONS[0])
@@ -159,10 +160,11 @@ while is_running:
 
 	for bullet in bullets:
 		if bullet['x'] < player[0] + tile_size and \
-		bullet['x'] + tile_size > player[0] and \
+		bullet['x'] + bullet_size > player[0] and \
 		bullet['y'] < player[1] + tile_size and \
-		bullet['y'] + tile_size > player[1]:
+		bullet['y'] + bullet_size > player[1]:
 			is_running = False
+			print score
 
 	updateDartTimers()
 	updateBullets()
