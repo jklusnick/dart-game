@@ -157,6 +157,13 @@ while is_running:
 	if player[1] > DIMENSIONS[1]:
 		player[1] = 0
 
+	for bullet in bullets:
+		if bullet['x'] < player[0] + tile_size and \
+		bullet['x'] + tile_size > player[0] and \
+		bullet['y'] < player[1] + tile_size and \
+		bullet['y'] + tile_size > player[1]:
+			is_running = False
+
 	updateDartTimers()
 	updateBullets()
 
